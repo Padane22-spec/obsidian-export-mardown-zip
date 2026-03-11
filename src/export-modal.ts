@@ -3,19 +3,22 @@ import { hasNativeDirectoryPicker, pickDirectory } from "./native-dialog";
 
 export interface ExportModalResult {
   outputDir: string;
+  zipName: string;
 }
 
 export class ExportConfirmModal extends Modal {
   private outputDir: string;
+  private zipName: string;
   private resolvePromise!: (result: ExportModalResult | null) => void;
   private settled = false;
 
   constructor(
     app: App,
-    private readonly zipFileName: string,
+    defaultZipName: string,
     defaultOutputDir: string
   ) {
     super(app);
+    this.zipName = defaultZipName;
     this.outputDir = defaultOutputDir;
   }
 
@@ -31,10 +34,22 @@ export class ExportConfirmModal extends Modal {
     contentEl.empty();
 
     contentEl.createEl("h2", { text: "Export note to zip" });
-    contentEl.createEl("p", {
-      cls: "share-markdown-zip-modal__hint",
-      text: `Archive name: ${this.zipFileName}`
-    });
+
+    let currentZipName = this.zipName;
+    let zipNameInput: TextComponent | null = null;
+
+    new Setting(contentEl)
+      .setName("Archive name")
+      .setDesc("The zip file name and the first-level folder name inside the archive.")
+      .addText((text) =>
+        (zipNameInput = text)
+          .setPlaceholder("My export")
+          .setValue(this.zipName)
+          .onChange((value) => {
+            currentZipName = value.trim();
+            this.zipName = currentZipName;
+          })
+      );
 
     let currentValue = this.outputDir;
 
@@ -94,12 +109,13 @@ export class ExportConfirmModal extends Modal {
       cls: "mod-cta"
     });
     confirmButton.addEventListener("click", () => {
-      if (!this.outputDir) {
+      if (!this.outputDir || !this.zipName) {
         return;
       }
 
       this.finish({
-        outputDir: this.outputDir
+        outputDir: this.outputDir,
+        zipName: this.zipName
       });
       this.close();
     });

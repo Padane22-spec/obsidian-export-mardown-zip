@@ -2,7 +2,7 @@ import { Notice, Platform, Plugin, TFile } from "obsidian";
 import { exportNoteToZip, isMarkdownFile } from "./exporter";
 import { ExportConfirmModal } from "./export-modal";
 import { DEFAULT_SETTINGS, type ShareMarkdownSettings } from "./export-types";
-import { getDefaultOutputDirFromVault, sanitizeZipRootName } from "./path-utils";
+import { getDefaultOutputDirFromVault, sanitizeArchiveStem } from "./path-utils";
 import { ShareMarkdownSettingTab, mergeSettings } from "./settings";
 
 const EXPORT_ACTIVE_NOTE_COMMAND = "share-markdown:export-active-note-to-zip";
@@ -72,16 +72,16 @@ export default class ShareMarkdownZipPlugin extends Plugin {
   }
 
   private async runExport(file: TFile): Promise<void> {
-    const outputDir = await this.resolveOutputDir(file);
-    if (!outputDir) {
+    const exportOptions = await this.resolveExportOptions(file);
+    if (!exportOptions) {
       return;
     }
 
     try {
       const result = await exportNoteToZip(this.app, {
         rootFile: file,
-        outputDir,
-        zipRootName: sanitizeZipRootName(file.basename)
+        outputDir: exportOptions.outputDir,
+        zipRootName: exportOptions.zipName
       });
       new Notice(
         `Exported ${result.exportedMarkdownCount} markdown files and ${result.exportedAssetCount} attachments to ${result.zipPath}`
@@ -93,18 +93,24 @@ export default class ShareMarkdownZipPlugin extends Plugin {
     }
   }
 
-  private async resolveOutputDir(file: TFile): Promise<string | null> {
+  private async resolveExportOptions(
+    file: TFile
+  ): Promise<{ outputDir: string; zipName: string } | null> {
     const defaultDir = this.settings.defaultOutputDir.trim();
+    const defaultZipName = sanitizeArchiveStem(file.basename);
     if (!defaultDir && !this.settings.promptForOutputDirOnExport) {
       new Notice("Set a default output directory in the plugin settings.");
       return null;
     }
 
     if (!this.settings.promptForOutputDirOnExport) {
-      return defaultDir;
+      return {
+        outputDir: defaultDir,
+        zipName: defaultZipName
+      };
     }
 
-    const modal = new ExportConfirmModal(this.app, `${file.basename}.zip`, defaultDir);
+    const modal = new ExportConfirmModal(this.app, defaultZipName, defaultDir);
     const result = await modal.openAndWait();
     if (!result) {
       return null;
@@ -115,6 +121,14 @@ export default class ShareMarkdownZipPlugin extends Plugin {
       return null;
     }
 
-    return result.outputDir.trim();
+    if (!result.zipName.trim()) {
+      new Notice("An archive name is required.");
+      return null;
+    }
+
+    return {
+      outputDir: result.outputDir.trim(),
+      zipName: sanitizeArchiveStem(result.zipName)
+    };
   }
 }

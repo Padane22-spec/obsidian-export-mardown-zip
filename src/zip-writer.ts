@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import JSZip from "jszip";
-import type { App, TFile } from "obsidian";
+import type { App } from "obsidian";
 import type { ExportPlan } from "./export-types";
 import type { RewrittenMarkdown } from "./markdown-rewriter";
 import { sanitizeFileStem } from "./path-utils";
@@ -34,13 +34,13 @@ export async function writeExportZip(
     }
   });
 
-  const zipPath = await resolveZipPath(outputDir, plan.rootFile);
+  const zipPath = await resolveZipPath(outputDir, plan.zipRootName);
   await fs.writeFile(zipPath, buffer);
   return zipPath;
 }
 
-async function resolveZipPath(outputDir: string, rootFile: TFile): Promise<string> {
-  const stem = sanitizeFileStem(rootFile.basename);
+async function resolveZipPath(outputDir: string, zipRootName: string): Promise<string> {
+  const stem = sanitizeFileStem(zipRootName);
   const initialPath = path.join(outputDir, `${stem}.zip`);
 
   try {

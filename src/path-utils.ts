@@ -31,8 +31,12 @@ export function sanitizeFileStem(name: string): string {
   return name.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-").trim() || "export";
 }
 
-export function sanitizeZipRootName(name: string): string {
-  return `${sanitizeFileStem(name)}-export`;
+export function sanitizeArchiveStem(name: string): string {
+  const trimmed = name.trim();
+  const withoutZip = trimmed.toLowerCase().endsWith(".zip")
+    ? trimmed.slice(0, -4)
+    : trimmed;
+  return sanitizeFileStem(withoutZip);
 }
 
 export function ensureRelativeMarkdownPath(sourcePath: string): string {

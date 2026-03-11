@@ -31,7 +31,7 @@ describe("writeExportZip", () => {
       app,
       {
         rootFile: { basename: "A" } as TFile,
-        zipRootName: "A-export",
+        zipRootName: "custom-name",
         markdownFiles: new Map(),
         assetFiles: new Map([["assets/image.png", { path: "assets/image.png" } as TFile]]),
         skippedLinks: 0
@@ -51,10 +51,11 @@ describe("writeExportZip", () => {
     const entries = Object.keys(zip.files).sort();
 
     expect(entries).toEqual([
-      "A-export/",
-      "A-export/A.md",
-      "A-export/assets/",
-      "A-export/assets/image.png"
+      "custom-name/",
+      "custom-name/A.md",
+      "custom-name/assets/",
+      "custom-name/assets/image.png"
     ]);
+    expect(path.basename(zipPath)).toBe("custom-name.zip");
   });
 });
