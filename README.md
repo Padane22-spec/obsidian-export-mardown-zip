@@ -1,6 +1,6 @@
-# Share Markdown Zip
+# Markdown Bundle Export
 
-Share Markdown Zip is an Obsidian desktop plugin that exports one Markdown note together with:
+Markdown Bundle Export is an Obsidian desktop plugin that exports one Markdown note together with:
 
 - recursively linked Markdown files
 - local image and non-image attachments
