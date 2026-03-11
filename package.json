@@ -1,0 +1,31 @@
+{
+  "name": "obsidian-share-markdown-zip",
+  "version": "0.1.0",
+  "description": "Obsidian plugin to export a note, linked markdown files, and local attachments into a zip archive.",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc --noEmit --skipLibCheck && node esbuild.config.mjs production",
+    "test": "vitest run"
+  },
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "markdown",
+    "zip"
+  ],
+  "author": "padane22",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "jszip": "^3.10.1",
+    "obsidian": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "esbuild": "^0.25.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}

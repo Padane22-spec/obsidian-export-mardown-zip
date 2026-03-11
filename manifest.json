@@ -1,0 +1,9 @@
+{
+  "id": "share-markdown-zip",
+  "name": "Share Markdown Zip",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Export a note, its linked markdown files, and local attachments into a zip archive.",
+  "author": "padane22",
+  "isDesktopOnly": true
+}
