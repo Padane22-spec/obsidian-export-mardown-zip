@@ -5,9 +5,9 @@ import { DEFAULT_SETTINGS, type ShareMarkdownSettings } from "./export-types";
 import { getDefaultOutputDirFromVault, sanitizeArchiveStem } from "./path-utils";
 import { ShareMarkdownSettingTab, mergeSettings } from "./settings";
 
-const EXPORT_ACTIVE_NOTE_COMMAND = "share-markdown:export-active-note-to-zip";
-const EXPORT_FILE_COMMAND = "share-markdown:export-file-to-zip";
+const EXPORT_ACTIVE_NOTE_COMMAND = "export-markdown-zip:export-markdown-zip";
 const EXPORT_ICON = "archive";
+const EXPORT_ACTION_NAME = "Export Markdown ZIP";
 
 export default class ShareMarkdownZipPlugin extends Plugin {
   settings!: ShareMarkdownSettings;
@@ -18,13 +18,13 @@ export default class ShareMarkdownZipPlugin extends Plugin {
     this.addSettingTab(new ShareMarkdownSettingTab(this.app, this));
 
     if (!Platform.isDesktopApp) {
-      new Notice("Markdown Bundle Export is only available on Obsidian Desktop.");
+      new Notice("Export Markdown ZIP is only available on Obsidian Desktop.");
       return;
     }
 
     this.addCommand({
       id: EXPORT_ACTIVE_NOTE_COMMAND,
-      name: "Export bundle as zip",
+      name: EXPORT_ACTION_NAME,
       icon: EXPORT_ICON,
       checkCallback: (checking) => {
         const file = this.app.workspace.getActiveFile();
@@ -48,7 +48,7 @@ export default class ShareMarkdownZipPlugin extends Plugin {
 
         menu.addItem((item) =>
           item
-            .setTitle("Export bundle as zip")
+            .setTitle(EXPORT_ACTION_NAME)
             .setIcon(EXPORT_ICON)
             .onClick(() => {
               void this.runExport(file);
