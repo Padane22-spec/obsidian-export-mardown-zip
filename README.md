@@ -1,6 +1,6 @@
-# Export Markdown ZIP
+# Export markdown ZIP
 
-Export Markdown ZIP is an Obsidian desktop plugin that exports one Markdown note together with:
+Export markdown ZIP is an Obsidian desktop plugin that exports one Markdown note together with:
 
 - recursively linked Markdown files
 - local image and non-image attachments
@@ -34,9 +34,9 @@ This plugin solves that problem by exporting the selected note as a self-contain
 
 1. Build the plugin with `npm install` and `npm run build`.
 2. Copy [manifest.json](./manifest.json), [main.js](./main.js), and [styles.css](./styles.css) into your vault at `.obsidian/plugins/export-markdown-zip/`.
-3. In Obsidian, open `Settings -> Community plugins`, disable restricted mode if needed, and enable `Export Markdown ZIP`.
+3. In Obsidian, open `Settings -> Community plugins`, disable restricted mode if needed, and enable `Export markdown ZIP`.
 4. Optionally set a default export directory in the plugin settings. You can also leave prompt mode enabled and choose a directory each time.
-5. Open a Markdown note and run `Export Markdown ZIP: Export Markdown ZIP` from the command palette, or right-click a note in the file explorer and choose `Export Markdown ZIP`.
+5. Open a Markdown note and run `Export markdown ZIP: Export markdown ZIP` from the command palette, or right-click a note in the file explorer and choose `Export markdown ZIP`.
 6. In the export dialog, set the archive name and output directory, then confirm.
 7. The plugin writes one zip file whose filename matches the archive name. Inside the zip, the first-level folder uses the same name.
 

@@ -28,7 +28,19 @@ export function getDefaultOutputDirFromVault(adapter: unknown): string {
 }
 
 export function sanitizeFileStem(name: string): string {
-  return name.replace(/[<>:"/\\|?*\x00-\x1F]/g, "-").trim() || "export";
+  return (
+    Array.from(name)
+      .map((character) => {
+        const codePoint = character.codePointAt(0) ?? 0;
+        if (codePoint < 32 || /[<>:"/\\|?*]/.test(character)) {
+          return "-";
+        }
+
+        return character;
+      })
+      .join("")
+      .trim() || "export"
+  );
 }
 
 export function sanitizeArchiveStem(name: string): string {

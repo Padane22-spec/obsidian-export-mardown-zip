@@ -1,4 +1,5 @@
-import type { App, TFile } from "obsidian";
+import { TFile } from "obsidian";
+import type { App } from "obsidian";
 import { ExportPlanner } from "./export-planner";
 import type { ExportRequest, ExportResult } from "./export-types";
 import { rewriteMarkdownFiles } from "./markdown-rewriter";
@@ -22,9 +23,5 @@ export async function exportNoteToZip(
 }
 
 export function isMarkdownFile(file: unknown): file is TFile {
-  if (!file || typeof file !== "object") {
-    return false;
-  }
-
-  return "extension" in file && (file as TFile).extension === "md";
+  return file instanceof TFile && file.extension === "md";
 }

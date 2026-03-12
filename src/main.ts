@@ -7,7 +7,7 @@ import { ShareMarkdownSettingTab, mergeSettings } from "./settings";
 
 const EXPORT_ACTIVE_NOTE_COMMAND = "export-markdown-zip:export-markdown-zip";
 const EXPORT_ICON = "archive";
-const EXPORT_ACTION_NAME = "Export Markdown ZIP";
+const EXPORT_ACTION_NAME = "Export markdown ZIP";
 
 export default class ShareMarkdownZipPlugin extends Plugin {
   settings!: ShareMarkdownSettings;
@@ -18,7 +18,7 @@ export default class ShareMarkdownZipPlugin extends Plugin {
     this.addSettingTab(new ShareMarkdownSettingTab(this.app, this));
 
     if (!Platform.isDesktopApp) {
-      new Notice("Export Markdown ZIP is only available on Obsidian Desktop.");
+      new Notice("Export markdown ZIP is only available on Obsidian Desktop.");
       return;
     }
 

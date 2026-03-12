@@ -1,35 +1,33 @@
 import { describe, expect, it } from "vitest";
 import type { App, TFile } from "obsidian";
+import { TFile as ObsidianTFile } from "obsidian";
 import { ExportPlanner } from "../src/export-planner";
 
 function createFile(path: string, content = ""): TFile {
   const name = path.split("/").pop() ?? path;
   const extension = name.includes(".") ? name.split(".").pop() ?? "" : "";
   const basename = extension ? name.slice(0, -(extension.length + 1)) : name;
+  const file = new ObsidianTFile();
+  file.path = path;
+  file.name = name;
+  file.basename = basename;
+  file.extension = extension;
 
-  return {
-    path,
-    name,
-    basename,
-    extension,
-    stat: {} as TFile["stat"],
-    vault: {} as TFile["vault"],
-    parent: null
-  } as TFile & { content: string };
+  return file as TFile & { content: string };
 }
 
 function createApp(files: Record<string, string>): App {
-  const fileMap = new Map<string, TFile & { content: string }>();
+  const fileMap = new Map<string, TFile>();
+  const contentMap = new Map<string, string>();
   for (const [filePath, content] of Object.entries(files)) {
-    fileMap.set(filePath, {
-      ...(createFile(filePath, content) as TFile),
-      content
-    } as TFile & { content: string });
+    const file = createFile(filePath, content);
+    fileMap.set(filePath, file);
+    contentMap.set(filePath, content);
   }
 
   return {
     vault: {
-      cachedRead: async (file: TFile) => (file as TFile & { content: string }).content,
+      cachedRead: async (file: TFile) => contentMap.get(file.path) ?? "",
       getAbstractFileByPath: (filePath: string) => fileMap.get(filePath) ?? null
     },
     metadataCache: {

@@ -35,7 +35,7 @@ type ElectronRemoteModule = {
 };
 
 type WindowWithRequire = Window & {
-  require?: NodeRequire;
+  require?: NodeJS.Require;
 };
 
 type NativeDialogHandle = {

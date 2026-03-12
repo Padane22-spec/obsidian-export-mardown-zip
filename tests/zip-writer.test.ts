@@ -3,6 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import JSZip from "jszip";
 import { afterEach, describe, expect, it } from "vitest";
+import { TFile as ObsidianTFile } from "obsidian";
 import type { App, TFile } from "obsidian";
 import { writeExportZip } from "../src/zip-writer";
 
@@ -27,13 +28,18 @@ describe("writeExportZip", () => {
       }
     } as unknown as App;
 
+    const rootFile = new ObsidianTFile();
+    rootFile.basename = "A";
+    const assetFile = new ObsidianTFile();
+    assetFile.path = "assets/image.png";
+
     const zipPath = await writeExportZip(
       app,
       {
-        rootFile: { basename: "A" } as TFile,
+        rootFile: rootFile as TFile,
         zipRootName: "custom-name",
         markdownFiles: new Map(),
-        assetFiles: new Map([["assets/image.png", { path: "assets/image.png" } as TFile]]),
+        assetFiles: new Map([["assets/image.png", assetFile as TFile]]),
         skippedLinks: 0
       },
       [

@@ -1,5 +1,6 @@
 import path from "path";
-import type { App, TFile } from "obsidian";
+import { TFile } from "obsidian";
+import type { App } from "obsidian";
 import { scanMarkdownLinks } from "./link-scanner";
 import type { ExportPlan, PlannedMarkdownFile } from "./export-types";
 import { normalizeVaultLinkPath } from "./path-utils";
@@ -92,10 +93,10 @@ export class ExportPlanner {
 
   private lookupFile(filePath: string): TFile | null {
     const candidate = this.app.vault.getAbstractFileByPath(filePath);
-    if (!candidate || !("extension" in candidate) || typeof candidate.extension !== "string") {
+    if (!(candidate instanceof TFile)) {
       return null;
     }
 
-    return candidate as TFile;
+    return candidate;
   }
 }

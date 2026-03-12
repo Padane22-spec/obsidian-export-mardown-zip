@@ -33,21 +33,17 @@ export class ExportConfirmModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    contentEl.createEl("h2", { text: "Export note to zip" });
-
-    let currentZipName = this.zipName;
-    let zipNameInput: TextComponent | null = null;
+    contentEl.createEl("h2", { text: "Export note to ZIP" });
 
     new Setting(contentEl)
       .setName("Archive name")
       .setDesc("The zip file name and the first-level folder name inside the archive.")
       .addText((text) =>
-        (zipNameInput = text)
+        text
           .setPlaceholder("My export")
           .setValue(this.zipName)
           .onChange((value) => {
-            currentZipName = value.trim();
-            this.zipName = currentZipName;
+            this.zipName = value.trim();
           })
       );
 
