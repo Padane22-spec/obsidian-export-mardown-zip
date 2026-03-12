@@ -75,6 +75,33 @@ describe("ExportPlanner", () => {
     expect(plan.skippedLinks).toBe(0);
   });
 
+  it("does not queue the same markdown file more than once before processing", async () => {
+    const readCounts = new Map<string, number>();
+    const app = createApp({
+      "A.md": "[[B]] [[C]]",
+      "B.md": "[[D]]",
+      "C.md": "[[D]]",
+      "D.md": "leaf"
+    });
+
+    const originalCachedRead = app.vault.cachedRead;
+    app.vault.cachedRead = async (file: TFile) => {
+      readCounts.set(file.path, (readCounts.get(file.path) ?? 0) + 1);
+      return originalCachedRead(file);
+    };
+
+    const planner = new ExportPlanner(app);
+    const plan = await planner.createPlan(createFile("A.md"), "A-export");
+
+    expect([...plan.markdownFiles.keys()].sort()).toEqual([
+      "A.md",
+      "B.md",
+      "C.md",
+      "D.md"
+    ]);
+    expect(readCounts.get("D.md")).toBe(1);
+  });
+
   it("counts unresolved local links as skipped", async () => {
     const app = createApp({
       "A.md": "[[Missing]] ![image](assets/missing.png)"

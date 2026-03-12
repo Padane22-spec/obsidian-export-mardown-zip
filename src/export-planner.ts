@@ -11,6 +11,7 @@ export class ExportPlanner {
     const markdownFiles = new Map<string, PlannedMarkdownFile>();
     const assetFiles = new Map<string, TFile>();
     const pendingPaths = [rootFile.path];
+    const queuedPaths = new Set<string>([rootFile.path]);
     let skippedLinks = 0;
 
     // Walk the note graph iteratively so cyclic links cannot blow up the call stack.
@@ -19,6 +20,7 @@ export class ExportPlanner {
       if (!currentPath || markdownFiles.has(currentPath)) {
         continue;
       }
+      queuedPaths.delete(currentPath);
 
       const currentFile = this.lookupFile(currentPath);
       if (!currentFile) {
@@ -43,8 +45,9 @@ export class ExportPlanner {
 
         // Markdown files extend the traversal; everything else is exported as an attachment.
         if (resolved.extension === "md") {
-          if (!markdownFiles.has(resolved.path)) {
+          if (!markdownFiles.has(resolved.path) && !queuedPaths.has(resolved.path)) {
             pendingPaths.push(resolved.path);
+            queuedPaths.add(resolved.path);
           }
           continue;
         }
