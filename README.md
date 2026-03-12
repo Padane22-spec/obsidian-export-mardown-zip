@@ -40,6 +40,49 @@ This plugin solves that problem by exporting the selected note as a self-contain
 6. In the export dialog, set the archive name and output directory, then confirm.
 7. The plugin writes one zip file whose filename matches the archive name. Inside the zip, the first-level folder uses the same name.
 
+## Example
+
+In the example below, entries without a file extension are Markdown notes:
+
+```text
+attachments/
+├── create link 1.png
+├── create link 2.png
+├── none of bussiness.png
+└── welcome 1.png
+create link
+none of bussiness
+welcome
+```
+
+Relationships:
+
+- `welcome.md` links to `create link.md`
+- `welcome.md` also embeds `attachments/welcome 1.png`
+- `create link.md` embeds `attachments/create link 1.png` and `attachments/create link 2.png`
+- `none of bussiness.md` only uses `attachments/none of bussiness.png` and is not linked from the other notes
+
+When you export `welcome.md`, the plugin produces `welcome.zip`.
+That archive includes only the files reachable from `welcome.md`:
+
+```text
+welcome.zip
+└── welcome/
+    ├── welcome.md
+    ├── create link.md
+    └── attachments/
+        ├── create link 1.png
+        ├── create link 2.png
+        └── welcome 1.png
+```
+
+`none of bussiness.md` and `attachments/none of bussiness.png` are not included because they are unrelated to `welcome.md`.
+
+Demo GIF placeholder: add your recording at `./docs/export-welcome.gif`.
+
+![](./docs/export-welcome.gif)
+![](./docs/export-welcome-result.gif)
+
 ## Development
 
 ```bash
