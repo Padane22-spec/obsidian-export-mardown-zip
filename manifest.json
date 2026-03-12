@@ -1,7 +1,7 @@
 {
   "id": "export-markdown-zip",
   "name": "Export markdown ZIP",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "minAppVersion": "1.5.0",
   "description": "Export a note with linked notes and local attachments into a zip archive.",
   "author": "padane22",

@@ -1,6 +1,6 @@
 {
   "name": "obsidian-share-markdown-zip",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Obsidian plugin to export a note with linked notes and local attachments into a zip archive.",
   "main": "main.js",
   "type": "module",
