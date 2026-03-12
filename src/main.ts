@@ -113,6 +113,7 @@ export default class ShareMarkdownZipPlugin extends Plugin {
       };
     }
 
+    // Prompt mode is the user-facing path for choosing both the archive name and destination.
     const modal = new ExportConfirmModal(this.app, defaultZipName, defaultDir);
     const result = await modal.openAndWait();
     if (!result) {

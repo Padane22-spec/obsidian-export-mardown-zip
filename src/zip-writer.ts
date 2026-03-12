@@ -17,6 +17,8 @@ export async function writeExportZip(
   const zip = new JSZip();
   const basePrefix = `${plan.zipRootName}/`;
 
+  // Keep the original vault-relative paths under one archive root so the extracted bundle
+  // stays tidy and link rewriting can rely on stable relative paths.
   for (const file of rewrittenFiles) {
     zip.file(`${basePrefix}${file.filePath}`, file.content);
   }
@@ -49,6 +51,7 @@ async function resolveZipPath(outputDir: string, zipRootName: string): Promise<s
     return initialPath;
   }
 
+  // Avoid overwriting an existing export; keep the requested base name and append a timestamp.
   const timestamp = new Date()
     .toISOString()
     .replace(/[:.]/g, "-")

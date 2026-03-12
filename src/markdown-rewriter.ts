@@ -14,6 +14,8 @@ export function rewriteMarkdownFiles(plan: ExportPlan): RewrittenMarkdown[] {
     ...plan.assetFiles.keys()
   ]);
 
+  // Rewriting is driven by the already-planned export set so we never emit links
+  // that point outside the archive.
   return Array.from(plan.markdownFiles.values()).map((entry) =>
     rewriteMarkdownFile(entry, exportedPaths)
   );
@@ -27,6 +29,8 @@ function rewriteMarkdownFile(
   let cursor = 0;
   let skippedLinks = 0;
 
+  // Rebuild the document from link slices so the original formatting survives untouched
+  // outside of the specific links we normalize.
   for (const occurrence of entry.occurrences) {
     output += entry.content.slice(cursor, occurrence.start);
     const replacement = rewriteOccurrence(entry.file.path, occurrence, exportedPaths);
@@ -62,6 +66,8 @@ function rewriteOccurrence(
     occurrence.subpath
   );
 
+  // All exported note-to-note links become standard markdown links so they remain portable
+  // outside of Obsidian.
   if (path.posix.extname(occurrence.resolvedPath) === ".md") {
     const label = occurrence.label || path.posix.basename(occurrence.resolvedPath, ".md");
     return {
@@ -88,6 +94,7 @@ function rewriteOccurrence(
 }
 
 function encodeMarkdownPath(target: string): string {
+  // Encode each path segment separately so spaces are escaped without mangling slashes.
   return target
     .split("/")
     .map((segment) => encodeURIComponent(segment))

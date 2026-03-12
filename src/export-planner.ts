@@ -13,6 +13,7 @@ export class ExportPlanner {
     const pendingPaths = [rootFile.path];
     let skippedLinks = 0;
 
+    // Walk the note graph iteratively so cyclic links cannot blow up the call stack.
     while (pendingPaths.length > 0) {
       const currentPath = pendingPaths.pop();
       if (!currentPath || markdownFiles.has(currentPath)) {
@@ -40,6 +41,7 @@ export class ExportPlanner {
           continue;
         }
 
+        // Markdown files extend the traversal; everything else is exported as an attachment.
         if (resolved.extension === "md") {
           if (!markdownFiles.has(resolved.path)) {
             pendingPaths.push(resolved.path);
@@ -71,6 +73,8 @@ export class ExportPlanner {
       return null;
     }
 
+    // Prefer Obsidian's own link resolver so wiki links, aliases, and extension-less links
+    // behave the same way they do inside the vault.
     const resolvedFromCache = this.app.metadataCache.getFirstLinkpathDest(
       targetPath,
       sourcePath

@@ -78,6 +78,8 @@ function loadNativeDialog(): NativeDialogHandle | null {
     return null;
   }
 
+  // Obsidian desktop builds do not expose a single stable dialog entry point across all
+  // Electron versions, so we probe the common variants in order.
   try {
     const electron = localRequire("electron") as ElectronLikeModule;
     if (electron.dialog) {
@@ -98,6 +100,7 @@ function loadNativeDialog(): NativeDialogHandle | null {
   }
 
   try {
+    // Older/community builds may still expose the dialog API through @electron/remote.
     const remote = localRequire("@electron/remote") as ElectronRemoteModule;
     if (remote.dialog) {
       return {
