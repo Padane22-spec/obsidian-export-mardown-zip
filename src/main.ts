@@ -18,7 +18,7 @@ export default class ShareMarkdownZipPlugin extends Plugin {
     this.addSettingTab(new ShareMarkdownSettingTab(this.app, this));
 
     if (!Platform.isDesktopApp) {
-      new Notice("Export markdown zip is only available on obsidian desktop.");
+      new Notice("export markdown zip is only available on obsidian desktop.");
       return;
     }
 
