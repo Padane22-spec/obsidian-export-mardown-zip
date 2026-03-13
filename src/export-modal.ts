@@ -33,7 +33,7 @@ export class ExportConfirmModal extends Modal {
     const { contentEl } = this;
     contentEl.empty();
 
-    contentEl.createEl("h2", { text: "Export note to ZIP" });
+    contentEl.createEl("h2", { text: "Export note to zip" });
 
     new Setting(contentEl)
       .setName("Archive name")
@@ -57,7 +57,7 @@ export class ExportConfirmModal extends Modal {
 
     outputSetting.addText((text) =>
       (outputInput = text)
-        .setPlaceholder("/Users/you/Exports")
+        .setPlaceholder("/users/you/exports")
         .setValue(this.outputDir)
         .onChange((value) => {
           currentValue = value.trim();

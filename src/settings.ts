@@ -20,7 +20,7 @@ export class ShareMarkdownSettingTab extends PluginSettingTab {
 
     outputDirSetting.addText((text) =>
         text
-          .setPlaceholder("/Users/you/Exports")
+          .setPlaceholder("/users/you/exports")
           .setValue(this.plugin.settings.defaultOutputDir)
           .onChange(async (value) => {
             currentValue = value.trim();
