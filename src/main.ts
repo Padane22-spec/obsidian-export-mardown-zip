@@ -7,7 +7,7 @@ import { ShareMarkdownSettingTab, mergeSettings } from "./settings";
 
 const EXPORT_ACTIVE_NOTE_COMMAND = "export-markdown-zip:export-markdown-zip";
 const EXPORT_ICON = "archive";
-const EXPORT_ACTION_NAME = "Export markdown ZIP";
+const EXPORT_ACTION_NAME = "Export Markdown ZIP";
 
 export default class ShareMarkdownZipPlugin extends Plugin {
   settings!: ShareMarkdownSettings;
